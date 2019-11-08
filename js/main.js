@@ -157,8 +157,8 @@ GLTFLoader.load(
 
       mixer.update(count);
 
-      ghost.scene.position.x = 400 + Math.sin(count * (Math.PI / 0,2)) * 500;
-      ghost.scene.position.y = -250 + Math.sin(count * (Math.PI / 0,2)) * 400;
+      ghost.scene.position.x = 400 + Math.sin(count * (Math.PI / 0, 2)) * 500;
+      ghost.scene.position.y = -250 + Math.sin(count * (Math.PI / 0, 2)) * 400;
       ghost.scene.position.z = -200 - Math.sin(count * (Math.PI / 0.2)) * 800;
 
       // console.log(ghost.scene.position);
@@ -179,7 +179,7 @@ GLTFLoader.load(
   }
 );
 
-//ghost
+//phoenix
 var phoenix;
 
 GLTFLoader.load(
@@ -207,13 +207,50 @@ GLTFLoader.load(
       count = count > 0.09 ? 0.03 : count + 0.001;
 
       mixer.update(count);
-      phoenix.scene.position.x = 800*Math.cos(count-0.03/0.06 * 2*Math.PI);
+      phoenix.scene.position.x =
+        800 * Math.cos(count - (0.03 / 0.06) * 2 * Math.PI);
       // phoenix.scene.position.y = 800*Math.sin(count-0.03/0.06 * Math.PI);
-      phoenix.scene.position.y = 800*Math.sin(count-0.03/0.06 * 2*Math.PI);
-      phoenix.scene.rotation.x =Math.sin(count * (Math.PI / 0, 2));
+      phoenix.scene.position.y =
+        800 * Math.sin(count - (0.03 / 0.06) * 2 * Math.PI);
+      phoenix.scene.rotation.x = Math.sin(count * (Math.PI / 0, 2));
 
       // console.log(ghost.scene.position);
     }, 100)(phoenix, mixer);
+  },
+  // called while loading is progressing
+  function(xhr) {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  // called when loading has errors
+  function(error) {
+    console.log("An error happened");
+  }
+);
+
+//ghost
+var ghost_stag;
+
+GLTFLoader.load(
+  // resource URL
+  "texture/ghost_stag/scene.gltf",
+  // called when the resource is loaded
+  function(gltf) {
+    scene.add(gltf.scene);
+    ghost_stag = gltf;
+    ghost_stag.scene.scale.set(0.2, 0.2, 0.2);
+    ghost_stag.scene.position.x = 400;
+    ghost_stag.scene.position.y = -240;
+    ghost_stag.scene.position.z = 500;
+    ghost_stag.scene.rotation.y = -Math.PI / 1.3;
+
+    var animateF = setInterval(function() {
+      animate();
+    }, 100);
+
+    function animate() {
+      ghost_stag.scene.position.y++;
+      if (ghost_stag.scene.position.y > 150) clearInterval(animateF);
+    }
   },
   // called while loading is progressing
   function(xhr) {
