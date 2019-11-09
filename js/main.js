@@ -88,6 +88,18 @@ var domdomMaterial = new THREE.MeshBasicMaterial({ color: 0xffd859 });
 //   domdom.position.set(x, y, z);
 // }
 
+//point light
+var sphere = new THREE.SphereGeometry(10, 10, 10);
+pointLight = new THREE.PointLight(0xf4aa49, 50, 120);
+var domdoma = new THREE.MeshBasicMaterial({ color: 0xffd859 });
+pointLight.add(new THREE.Mesh(sphere, domdoma));
+scene.add(pointLight);
+pointLight.position.set(350, 100, 300);
+
+function lightAnimation() {
+  pointLight.position.set(0, 0, 0);
+}
+
 var TGALoader = new THREE.TGALoader();
 var OBJLoader = new THREE.OBJLoader();
 var GLTFLoader = new THREE.GLTFLoader();
@@ -227,7 +239,7 @@ GLTFLoader.load(
   }
 );
 
-//ghost
+//ghost_stag
 var ghost_stag;
 
 GLTFLoader.load(
@@ -249,7 +261,10 @@ GLTFLoader.load(
 
     function animate() {
       ghost_stag.scene.position.y++;
-      if (ghost_stag.scene.position.y > 150) clearInterval(animateF);
+      if (ghost_stag.scene.position.y > 150) {
+        setInterval(lightAnimation, 300);
+        clearInterval(animateF);
+      }
     }
   },
   // called while loading is progressing
