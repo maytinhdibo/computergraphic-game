@@ -141,55 +141,55 @@ OBJLoader.load(
 );
 
 //ghost
-var ghost;
+// var ghost;
 
-GLTFLoader.load(
-  // resource URL
-  "texture/ghost/ghost.gltf",
-  // called when the resource is loaded
-  function(gltf) {
-    scene.add(gltf.scene);
-    ghost = gltf;
+// GLTFLoader.load(
+//   // resource URL
+//   "texture/ghost/ghost.gltf",
+//   // called when the resource is loaded
+//   function(gltf) {
+//     scene.add(gltf.scene);
+//     ghost = gltf;
 
-    ghost.scene.position.x = 240;
-    ghost.scene.position.y = -250;
-    ghost.scene.position.z = 50;
-    ghost.scene.rotation.y = -Math.PI / 2;
+//     ghost.scene.position.x = 240;
+//     ghost.scene.position.y = -250;
+//     ghost.scene.position.z = 50;
+//     ghost.scene.rotation.y = -Math.PI / 2;
 
-    gltf.animations; // Array<THREE.AnimationClip>
+//     gltf.animations; // Array<THREE.AnimationClip>
 
-    let mixer = new THREE.AnimationMixer(ghost.scene);
-    ghost.animations.forEach(clip => {
-      mixer.clipAction(clip).play();
-    });
+//     let mixer = new THREE.AnimationMixer(ghost.scene);
+//     ghost.animations.forEach(clip => {
+//       mixer.clipAction(clip).play();
+//     });
 
-    var count = 0;
-    setInterval(() => {
-      count = count > 0.2 ? 0 : count + 0.001;
+//     var count = 0;
+//     setInterval(() => {
+//       count = count > 0.2 ? 0 : count + 0.001;
 
-      mixer.update(count);
+//       mixer.update(count);
 
-      ghost.scene.position.x = 400 + Math.sin(count * (Math.PI / 0, 2)) * 500;
-      ghost.scene.position.y = -250 + Math.sin(count * (Math.PI / 0, 2)) * 400;
-      ghost.scene.position.z = -200 - Math.sin(count * (Math.PI / 0.2)) * 800;
+//       ghost.scene.position.x = 400 + Math.sin(count * (Math.PI / 0, 2)) * 500;
+//       ghost.scene.position.y = -250 + Math.sin(count * (Math.PI / 0, 2)) * 400;
+//       ghost.scene.position.z = -200 - Math.sin(count * (Math.PI / 0.2)) * 800;
 
-      // console.log(ghost.scene.position);
-    }, 100)(ghost, mixer);
+//       // console.log(ghost.scene.position);
+//     }, 100)(ghost, mixer);
 
-    gltf.scene; // THREE.Scene
-    gltf.scenes; // Array<THREE.Scene>
-    gltf.cameras; // Array<THREE.Camera>
-    gltf.asset; // Object
-  },
-  // called while loading is progressing
-  function(xhr) {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  // called when loading has errors
-  function(error) {
-    console.log("An error happened");
-  }
-);
+//     gltf.scene; // THREE.Scene
+//     gltf.scenes; // Array<THREE.Scene>
+//     gltf.cameras; // Array<THREE.Camera>
+//     gltf.asset; // Object
+//   },
+//   // called while loading is progressing
+//   function(xhr) {
+//     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+//   },
+//   // called when loading has errors
+//   function(error) {
+//     console.log("An error happened");
+//   }
+// );
 
 //phoenix
 var phoenix;
@@ -266,6 +266,41 @@ GLTFLoader.load(
         clearInterval(animateF);
       }
     }
+  },
+  // called while loading is progressing
+  function(xhr) {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  // called when loading has errors
+  function(error) {
+    console.log("An error happened");
+  }
+);
+
+//tree
+var tree;
+
+GLTFLoader.load(
+  // resource URL
+  "texture/tree/scene.gltf",
+  // called when the resource is loaded
+  function(gltf) {
+    scene.add(gltf.scene);
+    tree = gltf;
+
+    tree.scene.position.x = 450;
+    tree.scene.position.y = -250;
+    tree.scene.position.z = -750;
+    tree.scene.rotation.y = -Math.PI / 2;
+
+    tree.scene.scale.set(2, 2, 2);
+
+    tree.scene.rotation.y=Math.PI / 1.5;
+
+    let mixer = new THREE.AnimationMixer(tree.scene);
+    tree.animations.forEach(clip => {
+      mixer.clipAction(clip).play();
+    });
   },
   // called while loading is progressing
   function(xhr) {
