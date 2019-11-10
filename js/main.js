@@ -121,10 +121,13 @@ pointLight = new THREE.PointLight(0xf4aa49, 50, 120);
 var domdoma = new THREE.MeshBasicMaterial({ color: 0xffd859 });
 pointLight.add(new THREE.Mesh(sphere, domdoma));
 scene.add(pointLight);
-pointLight.position.set(350, 100, 300);
+pointLight.position.set(400, 100, 300);
 
+
+var t = 0;
 function lightAnimation() {
-  pointLight.position.set(0, 0, 0);
+  t++;
+  pointLight.position.set(400 + 200*Math.sin(t/10) , 100, 500 + 200*Math.cos(t/10));
 }
 
 //yasuo
@@ -224,30 +227,35 @@ GLTFLoader.load(
   function(gltf) {
     scene.add(gltf.scene);
     phoenix = gltf;
-
+    phoenix.scene.scale.set(0.5, 0.5, 0.5);
     phoenix.scene.position.x = 800;
-    phoenix.scene.position.y = -250;
-    phoenix.scene.position.z = 60;
+    phoenix.scene.position.y = 200;
+    phoenix.scene.position.z = 600;
     phoenix.scene.rotation.y = -Math.PI / 2;
-
     gltf.animations; // Array<THREE.AnimationClip>
 
     let mixer = new THREE.AnimationMixer(phoenix.scene);
     phoenix.animations.forEach(clip => {
       mixer.clipAction(clip).play();
     });
-
-    var count = 0;
+    const upper = 1000;
+    const lower = 199;
+    var signed = 1;
+    var count = 0; 
+    var beta = 0;
+    
     setInterval(() => {
-      count = count > 0.09 ? 0.03 : count + 0.001;
-
+      count = count > 0.2 ? 0.03 : count + 0.001;
       mixer.update(count);
-      phoenix.scene.position.x =
-        800 * Math.cos(count - (0.03 / 0.06) * 2 * Math.PI);
-      // phoenix.scene.position.y = 800*Math.sin(count-0.03/0.06 * Math.PI);
-      phoenix.scene.position.y =
-        800 * Math.sin(count - (0.03 / 0.06) * 2 * Math.PI);
-      phoenix.scene.rotation.x = Math.sin(count * (Math.PI / 0, 2));
+      const alpha = (2 * Math.PI) / 60;
+      if(phoenix.scene.position.y > upper || phoenix.scene.position.y < lower) signed *= -1;
+      phoenix.scene.position.y += 10*signed;
+      phoenix.scene.position.x = 800 + Math.sin(phoenix.scene.rotation.y)*500;
+      phoenix.scene.position.z = 600 + Math.cos(phoenix.scene.rotation.y)*500;
+      phoenix.scene.rotation.y += alpha;
+      beta += 10;
+
+  
 
       // console.log(ghost.scene.position);
     }, 100)(phoenix, mixer);
@@ -289,7 +297,7 @@ GLTFLoader.load(
     function animate() {
       ghost_stag.scene.position.y++;
       if (ghost_stag.scene.position.y > 150) {
-        // setInterval(lightAnimation, 300);
+        setInterval(lightAnimation, 300);
         clearInterval(animateF);
       }
     }
