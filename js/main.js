@@ -29,6 +29,9 @@ effect.setSize(window.innerWidth, window.innerHeight);
 
 //Loader
 var loader = new THREE.TextureLoader();
+var TGALoader = new THREE.TGALoader();
+var OBJLoader = new THREE.OBJLoader();
+var GLTFLoader = new THREE.GLTFLoader();
 
 // ground
 var groundTexture = loader.load("texture/grass.png");
@@ -62,6 +65,30 @@ hopgo.position.x = -5.6;
 hopgo.position.z = -5.6;
 hopgo.position.y = -4.5;
 scene.add(hopgo);
+
+//skybox
+
+let materialArray = [];
+let texture_ft = new THREE.TGALoader().load( 'texture/envmap/miramar_ft.tga');
+let texture_bk = new THREE.TGALoader().load( 'texture/envmap/miramar_bk.tga');
+let texture_up = new THREE.TGALoader().load( 'texture/envmap/miramar_up.tga');
+let texture_dn = new THREE.TGALoader().load( 'texture/envmap/miramar_dn.tga');
+let texture_rt = new THREE.TGALoader().load( 'texture/envmap/miramar_rt.tga');
+let texture_lf = new THREE.TGALoader().load( 'texture/envmap/miramar_lf.tga');
+  
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
+   
+for (let i = 0; i < 6; i++)
+  materialArray[i].side = THREE.BackSide;
+   
+let skyboxGeo = new THREE.BoxGeometry( 3000, 3000, 3000);
+let skybox = new THREE.Mesh( skyboxGeo, materialArray );
+scene.add(skybox);
 
 //domdom
 
@@ -99,10 +126,6 @@ pointLight.position.set(350, 100, 300);
 function lightAnimation() {
   pointLight.position.set(0, 0, 0);
 }
-
-var TGALoader = new THREE.TGALoader();
-var OBJLoader = new THREE.OBJLoader();
-var GLTFLoader = new THREE.GLTFLoader();
 
 //yasuo
 var yasuo;
@@ -255,14 +278,18 @@ GLTFLoader.load(
     ghost_stag.scene.position.z = 500;
     ghost_stag.scene.rotation.y = -Math.PI / 1.3;
 
-    var animateF = setInterval(function() {
-      animate();
-    }, 100);
+    var animateF;
+    setTimeout(function() {
+      document.querySelector("#rock").play();
+      animateF = setInterval(function() {
+        animate();
+      }, 100);
+    }, 5000);
 
     function animate() {
       ghost_stag.scene.position.y++;
       if (ghost_stag.scene.position.y > 150) {
-        setInterval(lightAnimation, 300);
+        // setInterval(lightAnimation, 300);
         clearInterval(animateF);
       }
     }
@@ -295,7 +322,7 @@ GLTFLoader.load(
 
     tree.scene.scale.set(2, 2, 2);
 
-    tree.scene.rotation.y=Math.PI / 1.5;
+    tree.scene.rotation.y = Math.PI / 1.5;
 
     let mixer = new THREE.AnimationMixer(tree.scene);
     tree.animations.forEach(clip => {
@@ -311,3 +338,74 @@ GLTFLoader.load(
     console.log("An error happened");
   }
 );
+
+//fire
+var fire;
+
+GLTFLoader.load(
+  // resource URL
+  "texture/fire/scene.gltf",
+  // called when the resource is loaded
+  function(gltf) {
+    scene.add(gltf.scene);
+    fire = gltf;
+
+    fire.scene.position.set(10, 0, 0);
+    fire.scene.rotation.y = -Math.PI / 2;
+
+    let mixer = new THREE.AnimationMixer(fire.scene);
+    fire.animations.forEach(clip => {
+      mixer.clipAction(clip).play();
+    });
+
+    var count = 0;
+    setInterval(() => {
+      count = count > 0.5 ? 0 : count + 0.05;
+
+      mixer.update(count);
+
+      // console.log(ghost.scene.position);
+    }, 100)(phoenix, mixer);
+  },
+  // called while loading is progressing
+  function(xhr) {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  // called when loading has errors
+  function(error) {
+    console.log("An error happened");
+  }
+);
+
+//planet
+var planet;
+
+GLTFLoader.load(
+  // resource URL
+  "texture/planet/scene.gltf",
+  // called when the resource is loaded
+  function(gltf) {
+    scene.add(gltf.scene);
+    planet = gltf;
+
+    // planet.scene.position.set(10, 0, 0);
+    planet.scene.position.set(-500, 800, 10);
+    planet.scene.scale.set(0.2, 0.2, 0.2);
+  },
+  // called while loading is progressing
+  function(xhr) {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  // called when loading has errors
+  function(error) {
+    console.log("An error happened");
+  }
+);
+
+//laugh
+document.onclick = function() {
+  document.querySelector("#audio").play();
+};
+setInterval(function() {
+  document.querySelector("#laugh").play();
+}, 20000);

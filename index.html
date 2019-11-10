@@ -62,7 +62,7 @@
     <div id="buttons">
       <button id="fullscreen">Fullscreen</button>
 
-      <button id="reset">Reset</button>
+      <button id="skybox">Turn on skybox</button>
     </div>
     <canvas id="canvastext"> </canvas>
   </body>
@@ -93,6 +93,7 @@
   <script src="lib/TGALoader.js"></script>
   <script src="lib/OBJLoader.js"></script>
   <script src="lib/GLTFLoader.js"></script>
+
   <script src="lib/jquery.js"></script>
 
   <script src="js/main.js"></script>
@@ -199,9 +200,12 @@
       document.getElementById("error").play();
     });
     document
-      .querySelector("button#reset")
+      .querySelector("button#skybox")
       .addEventListener("click", function() {
-        vrDisplay.resetPose();
+        skybox.visible = true;
+        scene.fog = false;
+        var daylight = new THREE.AmbientLight(0xffffff, 1);
+        scene.add(daylight);
       });
 
     function enterFullscreen(el) {
@@ -216,9 +220,9 @@
       }
     }
   </script>
-  <iframe style="display:none" id="iframe" src="speech.html"></iframe>
-  <audio autoplay loop src="sound/morning.ogg" id="audio"></audio>
-  <audio src="" id="error"></audio>
+  <audio autoplay loop src="audio/background.mp3" id="audio"></audio>
+  <audio id="rock" src="audio/rock.mp3" id="audio"></audio>
+  <audio id="laugh" src="audio/laugh.mp3" id="audio"></audio>
   <div style="display:none" id="text"></div>
   <script src="js/remote.js"></script>
   <script src="js/clock.js"></script>
