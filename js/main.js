@@ -69,25 +69,24 @@ scene.add(hopgo);
 //skybox
 
 let materialArray = [];
-let texture_ft = new THREE.TGALoader().load( 'texture/envmap/miramar_ft.tga');
-let texture_bk = new THREE.TGALoader().load( 'texture/envmap/miramar_bk.tga');
-let texture_up = new THREE.TGALoader().load( 'texture/envmap/miramar_up.tga');
-let texture_dn = new THREE.TGALoader().load( 'texture/envmap/miramar_dn.tga');
-let texture_rt = new THREE.TGALoader().load( 'texture/envmap/miramar_rt.tga');
-let texture_lf = new THREE.TGALoader().load( 'texture/envmap/miramar_lf.tga');
-  
-materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
-materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
-materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
-materialArray.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
-materialArray.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
-materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
-   
-for (let i = 0; i < 6; i++)
-  materialArray[i].side = THREE.BackSide;
-   
-let skyboxGeo = new THREE.BoxGeometry( 3000, 3000, 3000);
-let skybox = new THREE.Mesh( skyboxGeo, materialArray );
+let texture_ft = new THREE.TGALoader().load("texture/envmap/miramar_ft.tga");
+let texture_bk = new THREE.TGALoader().load("texture/envmap/miramar_bk.tga");
+let texture_up = new THREE.TGALoader().load("texture/envmap/miramar_up.tga");
+let texture_dn = new THREE.TGALoader().load("texture/envmap/miramar_dn.tga");
+let texture_rt = new THREE.TGALoader().load("texture/envmap/miramar_rt.tga");
+let texture_lf = new THREE.TGALoader().load("texture/envmap/miramar_lf.tga");
+
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_ft }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bk }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_up }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_dn }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_rt }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_lf }));
+
+for (let i = 0; i < 6; i++) materialArray[i].side = THREE.BackSide;
+
+let skyboxGeo = new THREE.BoxGeometry(3000, 3000, 3000);
+let skybox = new THREE.Mesh(skyboxGeo, materialArray);
 scene.add(skybox);
 
 //domdom
@@ -122,12 +121,16 @@ var domdoma = new THREE.MeshBasicMaterial({ color: 0xffd859 });
 pointLight.add(new THREE.Mesh(sphere, domdoma));
 scene.add(pointLight);
 pointLight.position.set(400, 100, 300);
-
+pointLight.visible = false;
 
 var t = 0;
 function lightAnimation() {
   t++;
-  pointLight.position.set(400 + 200*Math.sin(t/10) , 100, 500 + 200*Math.cos(t/10));
+  pointLight.position.set(
+    400 + 200 * Math.sin(t / 10),
+    100,
+    500 + 200 * Math.cos(t / 10)
+  );
 }
 
 //yasuo
@@ -241,21 +244,20 @@ GLTFLoader.load(
     const upper = 1000;
     const lower = 199;
     var signed = 1;
-    var count = 0; 
+    var count = 0;
     var beta = 0;
-    
+
     setInterval(() => {
       count = count > 0.2 ? 0.03 : count + 0.001;
       mixer.update(count);
       const alpha = (2 * Math.PI) / 60;
-      if(phoenix.scene.position.y > upper || phoenix.scene.position.y < lower) signed *= -1;
-      phoenix.scene.position.y += 10*signed;
-      phoenix.scene.position.x = 800 + Math.sin(phoenix.scene.rotation.y)*500;
-      phoenix.scene.position.z = 600 + Math.cos(phoenix.scene.rotation.y)*500;
+      if (phoenix.scene.position.y > upper || phoenix.scene.position.y < lower)
+        signed *= -1;
+      phoenix.scene.position.y += 10 * signed;
+      phoenix.scene.position.x = 800 + Math.sin(phoenix.scene.rotation.y) * 500;
+      phoenix.scene.position.z = 600 + Math.cos(phoenix.scene.rotation.y) * 500;
       phoenix.scene.rotation.y += alpha;
       beta += 10;
-
-  
 
       // console.log(ghost.scene.position);
     }, 100)(phoenix, mixer);
@@ -297,7 +299,8 @@ GLTFLoader.load(
     function animate() {
       ghost_stag.scene.position.y++;
       if (ghost_stag.scene.position.y > 150) {
-        setInterval(lightAnimation, 300);
+        setInterval(lightAnimation, 100);
+        pointLight.visible = true;
         clearInterval(animateF);
       }
     }
